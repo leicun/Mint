@@ -15,6 +15,7 @@ protocol DownloderDelegate:NSObjectProtocol {
 
 class Downloder: NSObject {
     var delegate:DownloderDelegate?
+    var type:Int?
 
     func downloderFunc(urlString:String){
         let url = NSURL(string: urlString)

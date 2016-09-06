@@ -8,16 +8,34 @@
 
 import UIKit
 
-class HomePageView: UIView {
 
-    private var tbView: UITableView?
+protocol HomePageViewDelegate: NSObjectProtocol {
+    func homePageTabelId(id:Int)
+}
+
+class HomePageView: UIView {
+    var delegate: HomePageViewDelegate?
+
+    var tbView: UITableView?
+    var clickClosure: CellClosure?
+    
     var model: ScrollModel?{
-        didSet{
+        
+        didSet {
+           
             tbView?.reloadData()
         }
     }
     
-    init(){
+    var choiceneModel:ChoicenessModel?
+        {
+        didSet {
+            tbView?.reloadData()
+           
+        }
+    }
+    
+        init(){
         super.init(frame:CGRectZero)
         tbView = UITableView(frame: CGRectZero, style: .Plain)
         tbView?.delegate = self
@@ -31,8 +49,6 @@ class HomePageView: UIView {
             make.edges.equalTo(self!)
             
         })
-        
-    
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,18 +60,24 @@ class HomePageView: UIView {
 extension HomePageView:UITableViewDelegate,UITableViewDataSource{
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var row = 0
+       var rowNum = 1
         if section == 0{
-            if model?.data?.banners?.count > 0{
-                row = 1
+            if model?.data?.banners?.count != 0{
+                
+                rowNum = 1
+                
+            }
+        }else {
+            if choiceneModel != nil{
+                rowNum = (choiceneModel?.data?.items?.count)!
             }
         }
         
-        return row
+        return rowNum
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -64,24 +86,43 @@ extension HomePageView:UITableViewDelegate,UITableViewDataSource{
             if model?.data?.banners?.count > 0{
                 height = 160
             }
+        }else{
+            height = 180
         }
-        
+      
         return height
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
+
         var cell = UITableViewCell()
-        
+      
         if indexPath.section == 0{
+            
+            
             if model?.data?.banners?.count > 0{
-                cell = HomeScrollCell.creataeCell(tableView, atIndexPath: indexPath, withModel: model!)
+                cell = HomeScrollCell.creataeCell(tableView, atIndexPath: indexPath, withModel: model!,cellClosure: clickClosure!)
+              
             }
+        }else{
+            let choicModel = choiceneModel?.data?.items
+            if choiceneModel?.data?.items?.count > 0 {
+                cell = ChoicenessCell.createCell(tableView, indexPath: indexPath, model: choicModel!)
+           }
         }
-        
+        cell.selectionStyle = .None
+
         return cell
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let id = Int((choiceneModel?.data?.items![indexPath.row].id)!)
+        self.delegate?.homePageTabelId(id)
+    }
+    
+    
     
 }
 

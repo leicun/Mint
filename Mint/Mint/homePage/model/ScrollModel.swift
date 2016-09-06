@@ -30,7 +30,6 @@ class ScrollModel: NSObject {
        
         return model
     }
-
 }
 
 class dataModel: NSObject{
@@ -75,13 +74,9 @@ class arrayModel: NSObject{
        
        
         model.channel = jsonData["channel"].string
-      
         model.id = jsonData["id"].number
-     
         model.image_url = jsonData["image_url"].string
-     
         model.order = jsonData["order"].number
-      
         model.status = jsonData["status"].number
         model.target_id = jsonData["target_id"].number
         model.target_url = jsonData["target_url"].string

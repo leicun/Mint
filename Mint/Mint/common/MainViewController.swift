@@ -25,8 +25,8 @@ class MainViewController: UITabBarController {
         var imageArray = [String]()
         
             ctrlArray = ["Mint.HomePageViewController","Mint.SingleItemViewController","Mint.CatetoryViewController","Mint.MyViewController"]
-            titleArray = ["首页","单品","分类","我"]
-            imageArray = ["tab_0","tab_2@2x","动态4_03@2x","account@2x"]
+            titleArray = ["薄荷家居","单品","分类","我"]
+            imageArray = ["主页","单品","分类","account@2x"]
         var navCtrlArray = Array<UINavigationController>()
         for i in 0..<ctrlArray.count{
             let cls = NSClassFromString(ctrlArray[i]) as! UIViewController.Type
@@ -34,11 +34,7 @@ class MainViewController: UITabBarController {
             ctrl.tabBarItem.title = titleArray[i]
            ctrl.tabBarItem.image = UIImage(named: imageArray[i])
             let nav = UINavigationController(rootViewController: ctrl)
-            
             navCtrlArray.append(nav)
-            
-           
-            
         }
         // self.createTabBarBtn(titleArray, image: imageArray)
         self.viewControllers = navCtrlArray
